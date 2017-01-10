@@ -5,12 +5,13 @@ const GoogleMapsAPI = require("googlemaps");
 const moment = require("moment-timezone");
 const request = require("request");
 
-var APP_ID = "amzn1.ask.skill.58f6a068-b767-498e-9fd2-c411fa40d93b"; 
-var SKILL_NAME = "Quakey";
+var APP_ID = "amzn1.ask.skill.58f6a068-b767-498e-9fd2-c411fa40d93b";
+var SKILL_NAME = "Quake Alert";
 
 var lat;
 var long;
 var quakeySlot;
+var stateSlot;
 const rad = 49.71;
 
 //Quakey Messenger and Alexa
@@ -41,8 +42,9 @@ var handlers = {
         this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptSpeech"]);
     },
     "GetQuake": function () {
-        console.log("went in GetElevation function");
+        console.log("went in GetQuake function");
         console.log("this.event.request.intent.slots.cityQ.value: " + this.event.request.intent.slots.cityQ.value);
+        console.log("this.event.request.intent.slots.stateQ.value: " + this.event.request.intent.slots.stateQ.value);
         var self = this;
         if(this.event.request.intent.slots.cityQ.value != undefined){
             quakeySlot = this.event.request.intent.slots.cityQ.value;
@@ -50,7 +52,12 @@ var handlers = {
                 self.emit("Unhandled");
             }
             else{
+              if(this.event.request.intent.slots.stateQ.value != undefined){
+                  stateSlot = this.event.request.intent.slots.stateQ.value;
+                  quakeySlot = quakeySlot + ", " + stateSlot;
+              }
               var params = {
+
                 "address": quakeySlot,
                 "components": "components=country:US",
                 "language":   "en",
@@ -81,7 +88,7 @@ var handlers = {
                 console.log("quake details undefined logic");
                 this.emit("Unhandled");
         }
-        else if(this.event.request.intent.slots.cityQ.value == "help"){
+        else if(this.event.request.intent.slots.cityQ.value == "help" || this.event.request.intent.slots.stateQ.value == "help"){
                 console.log("help if logic");
                 var speech = "You can ask a question like, when was the last earthquake in Redwood City, California? Please tell me the name of a city, and optionally also a state, you would like to find the latest earthquake in.";
                 this.attributes["speechOutput"] = speech;
