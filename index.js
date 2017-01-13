@@ -36,9 +36,9 @@ var handlers = {
 
         // If the user either does not reply to the welcome message or says something that is not
         // understood, they will be prompted again with this text.
-        this.attributes["speechOutput"] = "Welcome to " + SKILL_NAME + ". You can ask a question like, what was the last earthquake in San Francisco? Please tell me the name of a city, and optionally also a state, you would like to find the latest earthquake in.";
+        this.attributes["speechOutput"] = "Welcome to " + SKILL_NAME + ". You can ask a question like, what was the last earthquake in San Francisco, California? Please tell me the name of a city and a state you would like to find the latest earthquake in.";
 
-        this.attributes["repromptSpeech"] = "To find a recent earthquake in a city, say something like: what was the last earthquake in Los Angeles?";
+        this.attributes["repromptSpeech"] = "To find a recent earthquake in a city, say something like: what was the last earthquake in Los Angeles, California?";
         this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptSpeech"]);
     },
     "GetQuake": function () {
@@ -93,7 +93,7 @@ var handlers = {
         }
         else if(this.event.request.intent.slots.cityQ.value == "help" || this.event.request.intent.slots.stateQ.value == "help"){
                 console.log("help if logic");
-                var speech = "You can ask a question like, when was the last earthquake in Redwood City, California? Please tell me the name of a city, and optionally also a state, you would like to find the latest earthquake in.";
+                var speech = "You can ask a question like, when was the last earthquake in Redwood City, California? Please tell me the name of a city and a state you would like to find the latest earthquake in.";
                 this.attributes["speechOutput"] = speech;
                 this.attributes["repromptSpeech"] = speech;
                 this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptSpeech"])
@@ -101,8 +101,8 @@ var handlers = {
         else{
           // If the user either does not reply to the welcome message or says something that is not
           // understood, they will be prompted again with this text.
-          this.attributes["speechOutput"] = "Welcome to " + SKILL_NAME + ". You can ask a question like: what was the last earthquake in Sacramento?";
-          this.attributes["repromptSpeech"] = "To find a recent earthquake in a city, say something like: what was the last earthquake in Sacramento?";
+          this.attributes["speechOutput"] = "Welcome to " + SKILL_NAME + ". You can ask a question like: what was the last earthquake in Sacramento, California?";
+          this.attributes["repromptSpeech"] = "To find a recent earthquake in a city, say something like: what was the last earthquake in Sacramento, California?";
           this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptSpeech"])
         }
       },
@@ -113,7 +113,7 @@ var handlers = {
       var options = {
         url: "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=" + lat + "&longitude=" + long + radius + "&orderby=time"
       };
-      var speech = "It appears there has been no recorded earthquake in " + quakeySlot + " in the last 30 days in a " + rad + " mile radius. If you feel this is a mistake, try again and also mention the state name like 'Seattle, Washington' for more accurate results.";
+      var speech = "It appears there has been no recorded earthquake in " + quakeySlot + " in the last 30 days in a " + rad + " mile radius. If you feel this is a mistake, please try again at a later time or try pronouncing the city and/or state name more clearly.";
       request(options,
       function (err, res, body) {
         if (!err && res.statusCode == 200 && res.count != 0) {
@@ -135,7 +135,6 @@ var handlers = {
             };
             gmAPI.timezone(params, function(err, result) {
               if(err == null && result.status == "OK") {
-                var hoursOff = (result.dstOffset + result.rawOffset)/3600; //from GMT
                 var tzID = result.timeZoneId;
                 var mTime = moment.tz(unixTimeMS, tzID);
                 var date = mTime.format("MMMM Do YYYY");
@@ -164,7 +163,7 @@ var handlers = {
         console.log("went in Amazon.HelpIntent");
         // If the user either does not reply to the welcome message or says something that is not
         // understood, they will be prompted again with this text.
-        var speech = "You can ask a question like, when was the last quake in Seattle, Washington? Please tell me the name of a city, and optionally also a state, you would like to find the latest quake in.";
+        var speech = "You can ask a question like, when was the last quake in Seattle, Washington? Please tell me the name of a city and a state you would like to find the latest earthquake in.";
         this.attributes["speechOutput"] = speech;
         this.attributes["repromptSpeech"] = speech;
         this.emit(":ask", this.attributes["speechOutput"], this.attributes["repromptSpeech"])
