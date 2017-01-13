@@ -142,6 +142,7 @@ var handlers = {
                 var time = " at " + mTime.format("h:mm:ss a") + " local time";
                 console.log(date + time);
                 var label = miles >= 2 ? "miles" : "mile";
+                console.log("location: "+location);
                 speech = "The last earthquake in " + quakeySlot + " was a " + mag + " " + miles + " " + label + location + " on " + date + time;
                 console.log("USGS speech: " + speech);
                 self.emit(":tell", speech);
