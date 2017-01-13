@@ -81,6 +81,9 @@ var handlers = {
                    self.emit("Unhandled");
                   }
                 }
+                else{
+                  self.emit("Unhandled");
+                }
               });
             }
         }
